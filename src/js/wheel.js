@@ -7,7 +7,7 @@ import gsap from 'gsap'
 
 const rollerSpeed = 0.0004
 const renderer = new THREE.WebGLRenderer();
-
+renderer.shadowMap.enabled = true
 renderer.setSize(window.innerWidth, window.innerHeight);
 
 document.body.appendChild(renderer.domElement);
@@ -38,32 +38,57 @@ scene.add(ambientLight);
 const textureLoader = new THREE.TextureLoader();
 
 const planeGeo = new THREE.CircleGeometry(300, 300);
-const planeMat = new THREE.MeshBasicMaterial({
+const planeMat = new THREE.MeshStandardMaterial({
   map: textureLoader.load(uranusTexture),
   side: THREE.DoubleSide
 });
 const plane = new THREE.Mesh(planeGeo, planeMat);
 plane.rotation.x = 0.5 * Math.PI;
+plane.receiveShadow = true
+
 
 const boxGeo = new THREE.BoxGeometry(4, 5);
-const boxMat = new THREE.MeshBasicMaterial({
+const boxMat = new THREE.MeshStandardMaterial({
   map: textureLoader.load(marsTexture)
 });
 const centerBox = new THREE.Mesh(boxGeo, boxMat);
 
-const rollerGeo = new THREE.SphereGeometry(8, 8);
-const rollerMat = new THREE.MeshBasicMaterial({
+
+
+const rollerGeo = new THREE.BoxGeometry(8, 8);
+const rollerMat = new THREE.MeshStandardMaterial({
   map: textureLoader.load(earthTexture)
 });
 const roller = new THREE.Mesh(rollerGeo, rollerMat);
 roller.position.x = 50;
 roller.position.y = 8;
+roller.castShadow = true
+centerBox.castShadow = true;
+
+
+const roller1 = new THREE.Mesh(rollerGeo, rollerMat);
+roller1.position.x = 70;
+roller1.position.y = 8;
+roller1.castShadow = true;
+scene.add(roller1)
+
+
 
 const ringGeo = new THREE.RingGeometry(45, 50, 30)
-const ringMat = new THREE.MeshBasicMaterial({color: 0x00ff00, side: THREE.DoubleSide})
+const ringMat = new THREE.MeshStandardMaterial({
+  color: 0x00ff00,
+  side: THREE.DoubleSide
+});
 const ring = new THREE.Mesh(ringGeo, ringMat)
 ring.rotation.x = -0.5 * Math.PI;
 ring.position.y = 1;
+
+
+const directionalLight = new THREE.DirectionalLight(0xffffff, 5.0);
+scene.add(directionalLight);
+directionalLight.position.set(40,10,40)
+directionalLight.castShadow = true
+
 
 scene.add(centerBox, plane);
 centerBox.add(roller, ring);
