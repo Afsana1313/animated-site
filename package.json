@@ -3,6 +3,7 @@
     "vite-build": "vite build"
   },
   "dependencies": {
+    "cannon-es": "^0.20.0",
     "three": "^0.155.0"
   },
   "devDependencies": {

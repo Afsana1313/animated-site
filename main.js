@@ -1,52 +1,103 @@
 import * as THREE from "three";
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
+import * as CANNON from 'cannon-es'
+
 
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(
-  100,
+  45,
   window.innerWidth / window.innerHeight,
   0.1,
   1000
 );
-console.log(camera);
-// this is for rendering. This is must. irrespective of the objects rendered in the screen.
+
 const renderer = new THREE.WebGLRenderer();
 renderer.setSize(window.innerWidth, window.innerHeight);
 // used for box/3d designs
-const geometry = new THREE.BoxGeometry(2, 1, 3, 2, 1, 3);
-// Experimental purpose , may use it later.
-const image = new Image();
-image.src = "/littol-dog.jpg";
-// Experimental purpose , may use it later.
-const material = new THREE.MeshBasicMaterial({
-  color: "red",
-  opacity: 0.1,
-  combine: { blur: 0.2 },
-  reflectivity: 20
-  // map: {
-  //   image: image
-  // }
-});
-const cube = new THREE.Mesh(geometry, material);
-scene.add(cube);
 
-camera.position.z = 5;
+const orbit = new OrbitControls(camera, renderer.domElement)
+orbit.update()
 
-//create a blue LineBasicMaterial
-const linematerial = new THREE.LineBasicMaterial({ color: 0x0000ff });
-const points = [];
-points.push(new THREE.Vector3(-10, 0, 0));
-points.push(new THREE.Vector3(10, 0, 0));
+camera.position.set(0,20,-30)
 
-const linegeometry = new THREE.BufferGeometry().setFromPoints(points);
-const line = new THREE.Line(linegeometry, linematerial);
-scene.add(line);
+
 ////////////////////////
 document.body.appendChild(renderer.domElement);
+
+
+const boxGeo = new THREE.BoxGeometry(2, 2, 2)
+const boxMat = new THREE.MeshBasicMaterial({
+  color: 0x00ff00,
+  wireframe: true
+})
+const boxMesh = new THREE.Mesh(boxGeo, boxMat)
+scene.add(boxMesh)
+
+
+const sphereGeo = new THREE.SphereGeometry(2)
+const sphereMat = new THREE.MeshBasicMaterial({
+  color: 0xff0000,
+  wireframe: true,
+
+})
+const sphereMesh = new THREE.Mesh(sphereGeo,sphereMat)
+scene.add(sphereMesh)
+
+
+const groundGeo = new THREE.PlaneGeometry(30, 30)
+const groundMat = new THREE.MeshBasicMaterial({
+  color: 0xFFFFFF,
+  side: THREE.DoubleSide,
+  wireframe: true
+})
+const groundMesh = new THREE.Mesh(groundGeo, groundMat)
+scene.add(groundMesh)
+
+const world = new CANNON.World({
+  gravity: new CANNON.Vec3(0,-9.81,0)
+})
+
+const groundPhyMat = new CANNON.Material()
+
+const groundBody = new CANNON.Body({
+  // shape: new CANNON.Plane(),
+  //mass: 10,
+  type: CANNON.Body.STATIC,
+  shape: new CANNON.Box(new CANNON.Vec3(15, 15, 0.1)),
+  material: groundPhyMat
+});
+world.addBody(groundBody)
+groundBody.quaternion.setFromEuler(-Math.PI/ 2, 0 ,0)
+const timeStep = 1 / 60
+
+const boxBody = new CANNON.Body({
+  mass: 1,
+  shape: new CANNON.Box(new CANNON.Vec3(1, 1, 1)),
+  position: new CANNON.Vec3(5,20,0)
+})
+world.addBody(boxBody);
+boxBody.angularVelocity.set(0, 10,0)
+boxBody.angularDamping = 0.5
+const sphereBody = new CANNON.Body({
+  mass: 10,
+  shape: new CANNON.Sphere(2),
+  position: new CANNON.Vec3(0, 15, 0)
+});
+world.addBody(sphereBody);
+sphereBody.linearDamping = 0.31
+
+
 function animate() {
   requestAnimationFrame(animate);
-  cube.rotation.x += 0.01;
-  cube.rotation.y += 0.01;
-  cube.rotation.z += 0.01;
+  world.step(timeStep)
+  orbit.update();
+  groundMesh.position.copy(groundBody.position)
+  groundMesh.quaternion.copy(groundBody.quaternion)
+   boxMesh.position.copy(boxBody.position);
+  boxMesh.quaternion.copy(boxBody.quaternion);
+  
+    sphereMesh.position.copy(sphereBody.position);
+    sphereMesh.quaternion.copy(sphereBody.quaternion);
   renderer.render(scene, camera);
 }
 animate();
