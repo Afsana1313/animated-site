@@ -55,7 +55,7 @@ const centerBox = new THREE.Mesh(boxGeo, boxMat);
 
 
 
-const rollerGeo = new THREE.BoxGeometry(8, 8);
+const rollerGeo = new THREE.SphereGeometry(8, 800);
 const rollerMat = new THREE.MeshStandardMaterial({
   map: textureLoader.load(earthTexture)
 });
@@ -86,8 +86,20 @@ ring.position.y = 1;
 
 const directionalLight = new THREE.DirectionalLight(0xffffff, 5.0);
 scene.add(directionalLight);
-directionalLight.position.set(40,10,40)
+directionalLight.position.set(300,30,40)
 directionalLight.castShadow = true
+directionalLight.shadow.camera.bottom = -600
+directionalLight.shadow.camera.top = 900;
+directionalLight.shadow.camera.left = -600;
+directionalLight.shadow.camera.right = 600;
+
+
+const directionalLightHelper = new THREE.DirectionalLightHelper(directionalLight, 5)
+scene.add(directionalLightHelper)
+
+const cameraHelper = new THREE.CameraHelper(directionalLight.shadow.camera)
+scene.add(cameraHelper)
+
 
 
 scene.add(centerBox, plane);
