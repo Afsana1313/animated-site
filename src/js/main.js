@@ -1,9 +1,10 @@
 import * as THREE from "three";
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 import * as CANNON from 'cannon-es'
-
+import gsap from 'gsap'
 
 const scene = new THREE.Scene();
+scene.background = new THREE.Color(0xf29727);
 const camera = new THREE.PerspectiveCamera(
   45,
   window.innerWidth / window.innerHeight,
@@ -18,11 +19,26 @@ renderer.setSize(window.innerWidth, window.innerHeight);
 const orbit = new OrbitControls(camera, renderer.domElement)
 orbit.update()
 
-camera.position.set(0,20,-30)
+camera.position.set(80,80,-80)
 
 
 ////////////////////////
 document.body.appendChild(renderer.domElement);
+
+
+
+
+
+const cylinderGeo = new THREE.CylinderGeometry(2, 2, 200,500,500)
+const cylinderMat = new THREE.MeshBasicMaterial({
+  color: "#1D5B79",
+  side: THREE.DoubleSide
+});
+const cylinder = new THREE.Mesh(cylinderGeo,cylinderMat)
+scene.add(cylinder)
+cylinder.position.y = -100
+cylinder.color = "#F4F2DE";
+
 
 
 const boxGeo = new THREE.BoxGeometry(2, 2, 2)
@@ -32,6 +48,9 @@ const boxMat = new THREE.MeshBasicMaterial({
 })
 const boxMesh = new THREE.Mesh(boxGeo, boxMat)
 scene.add(boxMesh)
+
+
+
 
 
 const sphereGeo = new THREE.SphereGeometry(2)
@@ -44,14 +63,17 @@ const sphereMesh = new THREE.Mesh(sphereGeo,sphereMat)
 scene.add(sphereMesh)
 
 
-const groundGeo = new THREE.PlaneGeometry(30, 30)
+const groundGeo = new THREE.CylinderGeometry(15, 15, 1, 500,500);
 const groundMat = new THREE.MeshBasicMaterial({
-  color: 0xFFFFFF,
-  side: THREE.DoubleSide,
-  wireframe: true
-})
+  color: 0xA1CCD1,
+  side: THREE.DoubleSide
+});
 const groundMesh = new THREE.Mesh(groundGeo, groundMat)
 scene.add(groundMesh)
+groundMesh.rotation.z = -0.5 * Math.PI
+
+
+
 
 const world = new CANNON.World({
   gravity: new CANNON.Vec3(0,-9.81,0)
@@ -63,10 +85,12 @@ const groundBody = new CANNON.Body({
   // shape: new CANNON.Plane(),
   //mass: 10,
   type: CANNON.Body.STATIC,
-  shape: new CANNON.Box(new CANNON.Vec3(15, 15, 0.1)),
-  material: groundPhyMat
+  shape: new CANNON.Cylinder(15, 15, 1, 500, 500),
+  material: groundPhyMat,
+  fixedRotation: false
 });
 world.addBody(groundBody)
+
 groundBody.quaternion.setFromEuler(-Math.PI/ 2, 0 ,0)
 const timeStep = 1 / 60
 
@@ -119,6 +143,17 @@ function animate() {
   requestAnimationFrame(animate);
   world.step(timeStep)
   orbit.update();
+  gsap.to(camera.position, {
+    y: camera.position.y - 1,
+    duration: 0.5
+  });
+//   window.addEventListener('keydown', (e) => {
+   
+//     gsap.to(camera.position, {
+//       y: camera.position.y - 0.5
+//     })
+//  })
+
   groundMesh.position.copy(groundBody.position)
   groundMesh.quaternion.copy(groundBody.quaternion)
    boxMesh.position.copy(boxBody.position);
