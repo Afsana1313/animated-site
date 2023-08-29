@@ -4,6 +4,8 @@ import marsTexture from "../img/mars.jpg";
 import uranusTexture from "../img/uranus.jpg";
 import earthTexture from "../img/earth.jpg";
 import gsap from 'gsap'
+import { DragControls } from "three/addons/controls/DragControls.js";
+
 
 const rollerSpeed = 0.0004
 const renderer = new THREE.WebGLRenderer();
@@ -27,9 +29,12 @@ orbit.minDistance = 100.0
 orbit.minPolarAngle = 1.0
 orbit.maxPolarAngle = 1.5 
 
-orbit.enablePan = false
-camera.position.set(190, 140, 240);
+orbit.enableRotate = true
+
+camera.position.set(0, 140, 240);
+
 orbit.update();
+   //console.log(orbit.getAzimuthalAngle());
 
 
 const ambientLight = new THREE.AmbientLight(0x333333);
@@ -100,18 +105,18 @@ scene.add(directionalLightHelper)
 const cameraHelper = new THREE.CameraHelper(directionalLight.shadow.camera)
 scene.add(cameraHelper)
 
-
+//const controls = new DragControls([plane], camera, renderer.domElement);
 
 scene.add(centerBox, plane);
 centerBox.add(roller, ring);
 function animate() {
   //Self-rotation
   window.addEventListener("keydown", (e) => {
-    if (e.key == "ArrowLeft") {
-        centerBox.rotateY(0.0001);
-         roller.rotateX(-1 * rollerSpeed);
-    }
     if (e.key == "ArrowRight") {
+      centerBox.rotateY(0.0001);
+      roller.rotateX(-1 * rollerSpeed);
+    }
+    if (e.key == "ArrowLeft") {
         centerBox.rotateY(-0.0001);
           roller.rotateX(rollerSpeed);
       }
@@ -123,6 +128,14 @@ function animate() {
     //     }
     //   });
   });
+  orbit.addEventListener("change", () => {
+   // console.log(orbit.getAzimuthalAngle())
+    centerBox.rotateY(0.00001);
+  //  console.log(camera)
+      roller.rotateX(-1 * rollerSpeed);
+  });
+
+
   renderer.render(scene, camera);
 }
 
