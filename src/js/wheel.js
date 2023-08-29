@@ -66,10 +66,11 @@ roller.castShadow = true
 centerBox.castShadow = true;
 
 
-const roller1 = new THREE.Mesh(rollerGeo, rollerMat);
-roller1.position.x = 70;
-roller1.position.y = 8;
-roller1.castShadow = true;
+const roller1 = new THREE.Mesh(boxGeo, boxMat);
+ roller1.position.x = -10;
+ roller1.position.y = 2;
+//roller1.castShadow = true;
+roller1.receiveShadow = true
 scene.add(roller1)
 
 
