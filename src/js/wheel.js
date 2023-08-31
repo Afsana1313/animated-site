@@ -6,6 +6,8 @@ import earthTexture from "../img/earth.jpg";
 import gsap from 'gsap';
 import { DragControls } from "three/addons/controls/DragControls.js";
 // import * as GUI from "dat.gui";
+import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader"; 
+
 
 const rollerSpeed = 0.000004
 const ringInnerRadius = 250
@@ -28,7 +30,7 @@ const camera = new THREE.PerspectiveCamera(
   45,
   window.innerWidth / window.innerHeight,
   0.1,
-  4000
+  1000
 );
 
 const orbit = new OrbitControls(camera, renderer.domElement);
@@ -39,8 +41,8 @@ orbit.maxPolarAngle = 1.5
 
 orbit.enableRotate = true
 
-camera.position.set(900, 100,150);
-
+//camera.position.set(900, 100,150);
+camera.position.set(200, 100, 150);
 orbit.update();
    //console.log(orbit.getAzimuthalAngle());
 
@@ -48,15 +50,15 @@ orbit.update();
 const ambientLight = new THREE.AmbientLight(0x333333);
 scene.add(ambientLight);
 
-const waterBodyGeo = new THREE.CircleGeometry(3000, 300,3000)
-const waterBodyMat = new THREE.MeshStandardMaterial({
-  color: 0x006994
-});
-const waterBody = new THREE.Mesh(waterBodyGeo, waterBodyMat)
-scene.add(waterBody)
-waterBody.rotation.x = -0.5 * Math.PI
-waterBody.position.y = -10
-waterBody.receiveShadow = true
+// const waterBodyGeo = new THREE.CircleGeometry(3000, 300,3000)
+// const waterBodyMat = new THREE.MeshStandardMaterial({
+//   color: 0x006994
+// });
+// const waterBody = new THREE.Mesh(waterBodyGeo, waterBodyMat)
+// scene.add(waterBody)
+// waterBody.rotation.x = -0.5 * Math.PI
+// waterBody.position.y = -10
+// waterBody.receiveShadow = true
 
 
 // const skyGeo = new THREE.BoxGeometry(30000000, 3000)
@@ -70,33 +72,33 @@ waterBody.receiveShadow = true
 
 const textureLoader = new THREE.TextureLoader();
 
-const planeGeo = new THREE.CircleGeometry(300, 300);
-const planeMat = new THREE.MeshPhongMaterial({
-  color: new THREE.Color(0xfbb995),
-  side: THREE.DoubleSide
-});
-const plane = new THREE.Mesh(planeGeo, planeMat);
-plane.rotation.x = 0.5 * Math.PI;
-plane.receiveShadow = true
+// const planeGeo = new THREE.CircleGeometry(300, 300);
+// const planeMat = new THREE.MeshPhongMaterial({
+//   color: new THREE.Color(0xfbb995),
+//   side: THREE.DoubleSide
+// });
+// const plane = new THREE.Mesh(planeGeo, planeMat);
+// plane.rotation.x = 0.5 * Math.PI;
+// plane.receiveShadow = true
 
 
-const boxGeo = new THREE.BoxGeometry(4, 5);
-const boxMat = new THREE.MeshStandardMaterial({
-  map: textureLoader.load(marsTexture)
-});
-const centerBox = new THREE.Mesh(boxGeo, boxMat);
+// const boxGeo = new THREE.BoxGeometry(4, 5);
+// const boxMat = new THREE.MeshStandardMaterial({
+//   map: textureLoader.load(marsTexture)
+// });
+// const centerBox = new THREE.Mesh(boxGeo, boxMat);
 
 
 
-const rollerGeo = new THREE.SphereGeometry(rollerRadius, 800);
-const rollerMat = new THREE.MeshStandardMaterial({
-  map: textureLoader.load(earthTexture)
-});
-const roller = new THREE.Mesh(rollerGeo, rollerMat);
-roller.position.x = ringInnerRadius + rollerRadius / 2 ;
-roller.position.y = 8;
-roller.castShadow = true
-centerBox.castShadow = true;
+// const rollerGeo = new THREE.SphereGeometry(rollerRadius, 800);
+// const rollerMat = new THREE.MeshStandardMaterial({
+//   map: textureLoader.load(earthTexture)
+// });
+// const roller = new THREE.Mesh(rollerGeo, rollerMat);
+// roller.position.x = ringInnerRadius + rollerRadius / 2 ;
+// roller.position.y = 8;
+// roller.castShadow = true
+// centerBox.castShadow = true;
 
 
 const coneBotGeo = new THREE.ConeGeometry(10, 15, 32);
@@ -161,8 +163,8 @@ scene.add(cameraHelper)
 
 //const controls = new DragControls([plane], camera, renderer.domElement);
 
-scene.add(centerBox, plane, ring,roller);
-//centerBox.add(roller);
+scene.add(centerBox, plane, ring);
+centerBox.add(roller);
 
 
 
@@ -173,7 +175,20 @@ scene.add(centerBox, plane, ring,roller);
 //   rollerRadius: 8
 // }
 // gui.add(options, "speed",0,Math.PI)
-
+const cyclistURL = new URL("../assets/cyclist.glb", import.meta.url);
+const gltfLoader = new GLTFLoader();
+gltfLoader.load(
+  cyclistURL.href,
+  function (gltf) {
+    const model = gltf.scene;
+    model.scale.set(0.01, 0.01, 0.01);
+    scene.add(model);
+  },
+  undefined,
+  function (error) {
+    console.error(error);
+  }
+);
 function animate() {
   //Self-rotation
   window.addEventListener("keydown", (e) => {
@@ -182,9 +197,9 @@ function animate() {
       roller.rotateX(-rollerSpeedMultiplier * rollerSpeed);
     }
     if (e.key == "ArrowLeft") {
-        centerBox.rotateY(-rollerSpeed);
-          roller.rotateX(rollerSpeedMultiplier * rollerSpeed);
-      }
+      centerBox.rotateY(-rollerSpeed);
+      roller.rotateX(rollerSpeedMultiplier * rollerSpeed);
+    }
     //   gsap.to(camera.position, {
     //     z: 14,
     //       duration: 1.5,
@@ -196,12 +211,17 @@ function animate() {
   orbit.addEventListener("change", () => {
     // centerBox.rotateY(0.00001);
     // roller.rotateX(-1 * rollerSpeed);
-    roller.position.x = Math.sin(time * 0.7) * 270;
-    roller.position.z = camera.rotation.y * 120;
+    // roller.position.x = Math.sin(time * 0.7) * 270;
+    //  roller.position.z = camera.rotation.y * 120;
   });
-  // const time = Date.now() * 0.0005;
-  // directionalLight.position.x = Math.sin(time * 0.7) * 270 ;
-  // directionalLight.position.z = Math.cos(time * 0.7) * 270 ;
+  const time = Date.now() * 0.0005;
+  // camera.position.x = Math.sin(time * 0.7) * 470;
+  // camera.position.z = Math.cos(time * 0.7) * 470;
+  //  roller.position.x = Math.sin(time * 0.7) * 270;
+  //  roller.position.z = Math.cos(time * 0.7) * 270;
+  // //centerBox.rotateY(0.00001);
+  // roller.rotateX(-1 * rollerSpeed);
+  camera.lookAt(0, 0, 0);
 
   renderer.render(scene, camera);
 }
