@@ -41,8 +41,8 @@ orbit.maxPolarAngle = 1.5
 
 orbit.enableRotate = true
 
-//camera.position.set(900, 100,150);
-camera.position.set(200, 100, 150);
+camera.position.set(900, 100,150);
+
 orbit.update();
    //console.log(orbit.getAzimuthalAngle());
 
@@ -50,15 +50,15 @@ orbit.update();
 const ambientLight = new THREE.AmbientLight(0x333333);
 scene.add(ambientLight);
 
-// const waterBodyGeo = new THREE.CircleGeometry(3000, 300,3000)
-// const waterBodyMat = new THREE.MeshStandardMaterial({
-//   color: 0x006994
-// });
-// const waterBody = new THREE.Mesh(waterBodyGeo, waterBodyMat)
-// scene.add(waterBody)
-// waterBody.rotation.x = -0.5 * Math.PI
-// waterBody.position.y = -10
-// waterBody.receiveShadow = true
+const waterBodyGeo = new THREE.CircleGeometry(3000, 300,3000)
+const waterBodyMat = new THREE.MeshStandardMaterial({
+  color: 0x006994
+});
+const waterBody = new THREE.Mesh(waterBodyGeo, waterBodyMat)
+scene.add(waterBody)
+waterBody.rotation.x = -0.5 * Math.PI
+waterBody.position.y = -10
+waterBody.receiveShadow = true
 
 
 // const skyGeo = new THREE.BoxGeometry(30000000, 3000)
@@ -72,33 +72,33 @@ scene.add(ambientLight);
 
 const textureLoader = new THREE.TextureLoader();
 
-// const planeGeo = new THREE.CircleGeometry(300, 300);
-// const planeMat = new THREE.MeshPhongMaterial({
-//   color: new THREE.Color(0xfbb995),
-//   side: THREE.DoubleSide
-// });
-// const plane = new THREE.Mesh(planeGeo, planeMat);
-// plane.rotation.x = 0.5 * Math.PI;
-// plane.receiveShadow = true
+const planeGeo = new THREE.CircleGeometry(300, 300);
+const planeMat = new THREE.MeshPhongMaterial({
+  color: new THREE.Color(0xfbb995),
+  side: THREE.DoubleSide
+});
+const plane = new THREE.Mesh(planeGeo, planeMat);
+plane.rotation.x = 0.5 * Math.PI;
+plane.receiveShadow = true
 
 
-// const boxGeo = new THREE.BoxGeometry(4, 5);
-// const boxMat = new THREE.MeshStandardMaterial({
-//   map: textureLoader.load(marsTexture)
-// });
-// const centerBox = new THREE.Mesh(boxGeo, boxMat);
+const boxGeo = new THREE.BoxGeometry(4, 5);
+const boxMat = new THREE.MeshStandardMaterial({
+  map: textureLoader.load(marsTexture)
+});
+const centerBox = new THREE.Mesh(boxGeo, boxMat);
 
 
 
-// const rollerGeo = new THREE.SphereGeometry(rollerRadius, 800);
-// const rollerMat = new THREE.MeshStandardMaterial({
-//   map: textureLoader.load(earthTexture)
-// });
-// const roller = new THREE.Mesh(rollerGeo, rollerMat);
-// roller.position.x = ringInnerRadius + rollerRadius / 2 ;
-// roller.position.y = 8;
-// roller.castShadow = true
-// centerBox.castShadow = true;
+const rollerGeo = new THREE.SphereGeometry(rollerRadius, 800);
+const rollerMat = new THREE.MeshStandardMaterial({
+  map: textureLoader.load(earthTexture)
+});
+const roller = new THREE.Mesh(rollerGeo, rollerMat);
+roller.position.x = ringInnerRadius + rollerRadius / 2 ;
+roller.position.y = 8;
+roller.castShadow = true
+centerBox.castShadow = true;
 
 
 const coneBotGeo = new THREE.ConeGeometry(10, 15, 32);
@@ -215,12 +215,12 @@ function animate() {
     //  roller.position.z = camera.rotation.y * 120;
   });
   const time = Date.now() * 0.0005;
-  // camera.position.x = Math.sin(time * 0.7) * 470;
-  // camera.position.z = Math.cos(time * 0.7) * 470;
-  //  roller.position.x = Math.sin(time * 0.7) * 270;
-  //  roller.position.z = Math.cos(time * 0.7) * 270;
-  // //centerBox.rotateY(0.00001);
-  // roller.rotateX(-1 * rollerSpeed);
+  camera.position.x = Math.sin(time * 0.7) * 470;
+  camera.position.z = Math.cos(time * 0.7) * 470;
+   roller.position.x = Math.sin(time * 0.7) * 270;
+   roller.position.z = Math.cos(time * 0.7) * 270;
+  //centerBox.rotateY(0.00001);
+  roller.rotateX(-1 * rollerSpeed);
   camera.lookAt(0, 0, 0);
 
   renderer.render(scene, camera);
