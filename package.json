@@ -4,9 +4,11 @@
   },
   "dependencies": {
     "gsap": "^3.12.2",
+    "react-icons": "^4.10.1",
     "three": "^0.155.0"
   },
   "devDependencies": {
+    "dat.gui": "^0.7.9",
     "vite": "^4.4.9"
   }
 }
