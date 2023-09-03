@@ -1,13 +1,12 @@
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import marsTexture from "../img/mars.jpg";
-import uranusTexture from "../img/uranus.jpg";
 import earthTexture from "../img/earth.jpg";
-import gsap from 'gsap';
-import { DragControls } from "three/addons/controls/DragControls.js";
+//import gsap from 'gsap';
+//import { DragControls } from "three/addons/controls/DragControls.js";
 // import * as GUI from "dat.gui";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader"; 
-
+import { cloud } from "./cloud";
 
 const rollerSpeed = 0.000004
 const ringInnerRadius = 250
@@ -30,14 +29,14 @@ const camera = new THREE.PerspectiveCamera(
   45,
   window.innerWidth / window.innerHeight,
   0.1,
-  1000
+  4000
 );
 
 const orbit = new OrbitControls(camera, renderer.domElement);
-orbit.maxDistance = 500.0
-orbit.minDistance = 100.0
-orbit.minPolarAngle = 1.0
-orbit.maxPolarAngle = 1.5 
+// orbit.maxDistance = 500.0
+// orbit.minDistance = 100.0
+// orbit.minPolarAngle = 1.0
+// orbit.maxPolarAngle = 1.5 
 
 orbit.enableRotate = true
 
@@ -175,20 +174,28 @@ centerBox.add(roller);
 //   rollerRadius: 8
 // }
 // gui.add(options, "speed",0,Math.PI)
-const cyclistURL = new URL("../assets/cyclist.glb", import.meta.url);
-const gltfLoader = new GLTFLoader();
-gltfLoader.load(
-  cyclistURL.href,
-  function (gltf) {
-    const model = gltf.scene;
-    model.scale.set(0.01, 0.01, 0.01);
-    scene.add(model);
-  },
-  undefined,
-  function (error) {
-    console.error(error);
-  }
-);
+// const cyclistURL = new URL("../assets/cyclist.glb", import.meta.url);
+// const gltfLoader = new GLTFLoader();
+// gltfLoader.load(
+//   cyclistURL.href,
+//   function (gltf) {
+//     const model = gltf.scene;
+//     model.scale.set(0.01, 0.01, 0.01);
+//     scene.add(model);
+//   },
+//   undefined,
+//   function (error) {
+//     console.error(error);
+//   }
+// );
+// scene.add(gltfLoader)
+// gltfLoader.position.x = 0;
+// gltfLoader.position.y = 0;
+// gltfLoader.position.z = 0;
+
+const cloud1 = new cloud().getPlane()
+scene.add(cloud1);
+cloud1.position.y = 10
 function animate() {
   //Self-rotation
   window.addEventListener("keydown", (e) => {
@@ -215,10 +222,10 @@ function animate() {
     //  roller.position.z = camera.rotation.y * 120;
   });
   const time = Date.now() * 0.0005;
-  camera.position.x = Math.sin(time * 0.7) * 470;
-  camera.position.z = Math.cos(time * 0.7) * 470;
-   roller.position.x = Math.sin(time * 0.7) * 270;
-   roller.position.z = Math.cos(time * 0.7) * 270;
+  // camera.position.x = Math.sin(time * 0.7) * 470;
+  // camera.position.z = Math.cos(time * 0.7) * 470;
+  //  roller.position.x = Math.sin(time * 0.7) * 270;
+  //  roller.position.z = Math.cos(time * 0.7) * 270;
   //centerBox.rotateY(0.00001);
   roller.rotateX(-1 * rollerSpeed);
   camera.lookAt(0, 0, 0);
