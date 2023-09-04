@@ -6,7 +6,7 @@ import earthTexture from "../img/earth.jpg";
 import gsap from 'gsap';
 import { DragControls } from "three/addons/controls/DragControls.js";
 // import * as GUI from "dat.gui";
-import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader"; 
+//import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader"; 
 
 
 const rollerSpeed = 0.000004
@@ -30,7 +30,7 @@ const camera = new THREE.PerspectiveCamera(
   45,
   window.innerWidth / window.innerHeight,
   0.1,
-  1000
+  4000
 );
 
 const orbit = new OrbitControls(camera, renderer.domElement);
@@ -175,20 +175,20 @@ centerBox.add(roller);
 //   rollerRadius: 8
 // }
 // gui.add(options, "speed",0,Math.PI)
-const cyclistURL = new URL("../assets/cyclist.glb", import.meta.url);
-const gltfLoader = new GLTFLoader();
-gltfLoader.load(
-  cyclistURL.href,
-  function (gltf) {
-    const model = gltf.scene;
-    model.scale.set(0.01, 0.01, 0.01);
-    scene.add(model);
-  },
-  undefined,
-  function (error) {
-    console.error(error);
-  }
-);
+// const phoenixURL = new URL("../assets/cyclist.glb", import.meta.url);
+// const gltfLoader = new GLTFLoader();
+// gltfLoader.load(
+//   phoenixURL.href,
+//   function (gltf) {
+//     const model = gltf.scene;
+//     model.scale.set(0.01, 0.01, 0.01);
+//     scene.add(model);
+//   },
+//   undefined,
+//   function (error) {
+//     console.error(error);
+//   }
+// );
 function animate() {
   //Self-rotation
   window.addEventListener("keydown", (e) => {
