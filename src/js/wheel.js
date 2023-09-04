@@ -1,7 +1,6 @@
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
-import marsTexture from "../img/mars.jpg";
-import earthTexture from "../img/earth.jpg";
+
 //import gsap from 'gsap';
 //import { DragControls } from "three/addons/controls/DragControls.js";
 // import * as GUI from "dat.gui";
@@ -93,21 +92,21 @@ plane.receiveShadow = true
 
 const boxGeo = new THREE.BoxGeometry(1, 1);
 const boxMat = new THREE.MeshStandardMaterial({
-  map: textureLoader.load(marsTexture)
+ 
 });
 const centerBox = new THREE.Mesh(boxGeo, boxMat);
 
 
 
-const rollerGeo = new THREE.SphereGeometry(rollerRadius, 800);
-const rollerMat = new THREE.MeshStandardMaterial({
-  map: textureLoader.load(earthTexture)
-});
-const roller = new THREE.Mesh(rollerGeo, rollerMat);
-roller.position.x = ringInnerRadius + rollerRadius / 2 ;
-roller.position.y = 8;
-roller.castShadow = true
-centerBox.castShadow = true;
+// const rollerGeo = new THREE.SphereGeometry(rollerRadius, 800);
+// const rollerMat = new THREE.MeshStandardMaterial({
+//   map: textureLoader.load(earthTexture)
+// });
+// const roller = new THREE.Mesh(rollerGeo, rollerMat);
+// roller.position.x = ringInnerRadius + rollerRadius / 2 ;
+// roller.position.y = 8;
+// roller.castShadow = true
+// centerBox.castShadow = true;
 
 
 
@@ -146,7 +145,7 @@ directionalLight.shadow.mapSize.height = mapShadowSize;
 
 scene.add(centerBox, plane, ring);
 //scene.add(plane);
-centerBox.add(roller);
+//centerBox.add(roller);
 
 
 
