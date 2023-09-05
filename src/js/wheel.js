@@ -814,8 +814,91 @@ let cameraRotation = 0;
 scene.add(...allSmallTree())
 
 
+function toggle() {
+  // console.log(camera.position);
+  // if (camera.position.x >= 255 && camera.position.x <= 285) {
+  //   var toggle = document.getElementById("toggle");
+  //   var paragraph = document.createElement("p");
+  //   toggle.textContent = "Mountain";
+  //   toggle.appendChild(paragraph);
+  //   toggle.style.display = "block";
+  // } else if (camera.position.x >= 300 && camera.position.x <= 330) {
+  //   var toggle = document.getElementById("toggle");
+  //   var paragraph = document.createElement("p");
+  //   toggle.textContent = "Clipper";
+  //   toggle.appendChild(paragraph);
+  //   toggle.style.display = "block";
+  // } else if (camera.position.x >= 165 && camera.position.x <= 195) {
+  //   var toggle = document.getElementById("toggle");
+  //   var paragraph = document.createElement("p");
+  //   toggle.textContent = "House";
+  //   toggle.appendChild(paragraph);
+  //   toggle.style.display = "block";
+  // } else if (camera.position.x <= -45 && camera.position.x >= -65) {
+  //   var toggle = document.getElementById("toggle");
+  //   var paragraph = document.createElement("p");
+  //   toggle.textContent = "Robot";
+  //   toggle.appendChild(paragraph);
+  //   toggle.style.display = "block";
+  // } else if (camera.position.x <= -205 && camera.position.x >= -235) {
+  //   var toggle = document.getElementById("toggle");
+  //   var paragraph = document.createElement("p");
+  //   toggle.textContent = "Mug";
+  //   toggle.appendChild(paragraph);
+  //   toggle.style.display = "block";
+  // }
+  if (
+    camera.position.x <= -200 &&
+    camera.position.x >= -300 &&
+    camera.position.z >= 75 &&
+    camera.position.z <= 280
+  ) {
+    var toggle = document.getElementById("toggle");
+    //var paragraph = document.createElement("p");
+    //toggle.textContent = "Our Team";
+    //toggle.appendChild(paragraph);
+    toggle.style.display = "block";
+  }
+  if (
+    camera.position.x <= -260 &&
+    camera.position.x >= -470 &&
+    camera.position.z >= 100 &&
+    camera.position.z <= 400
+  ) {
+    var toggle = document.getElementById("toggle");
+    //var paragraph = document.createElement("p");
+    // toggle.textContent = "Our Team";
+    //toggle.appendChild(paragraph);
+    toggle.style.display = "block";
+  }
+  // else if (camera.position.x <= -250 && camera.position.x >= -280) {
+  //   var toggle = document.getElementById("toggle");
+  //   var paragraph = document.createElement("p");
+  //   toggle.textContent = "Stage";
+  //   toggle.appendChild(paragraph);
+  //   toggle.style.display = "block";
+  // } else if (camera.position.x <= -75 && camera.position.x >= -105) {
+  //   var toggle = document.getElementById("toggle");
+  //   var paragraph = document.createElement("p");
+  //   toggle.textContent = "Human";
+  //   toggle.appendChild(paragraph);
+  //   toggle.style.display = "block";
+  // } else if (camera.position.x >= 85 && camera.position.x <= 115) {
+  //   var toggle = document.getElementById("toggle");
+  //   var paragraph = document.createElement("p");
+  //   toggle.textContent = "FoodCart";
+  //   toggle.appendChild(paragraph);
+  //   toggle.style.display = "block";
+  // }
+  else {
+    var toggle = document.getElementById("toggle");
+    toggle.style.display = "none";
+  }
+}
+
 function animate() {
   //Self-rotation
+  toggle()
   const time = Date.now() * 0.0005;
   scooterLoaderx = Math.sin(time * 0.7) * 240;
   scooterLoaderz = Math.cos(time * 0.7) * 240;
