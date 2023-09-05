@@ -20,6 +20,8 @@ const mapShadowSize = 8096
 const waterBodyColor = 0xb7d4ff
 
 
+let scooterLoaderx, scooterLoaderz;
+
 const islandY = 50
 
 const renderer = new THREE.WebGLRenderer();
@@ -275,7 +277,7 @@ clapperloader.load(
       animationAction.play();
     });
 
-    centerBox.add(gltf.scene);
+    scene.add(gltf.scene);
 
     gltf.scene.scale.set(30, 30, 30);
     gltf.scene.position.x = 210;
@@ -311,13 +313,14 @@ scooterloader.load(
         }
       });
 
-    centerBox.add(gltf.scene);
+    scene.add(gltf.scene);
 
     gltf.scene.scale.set(8, 8, 8);
-    gltf.scene.position.x = 245;
-     gltf.scene.position.z = 24;
+    gltf.scene.position.x = scooterLoaderx;
+     gltf.scene.position.z = scooterLoaderz;
     gltf.scene.position.y = 0 + islandY;
-    gltf.scene.rotateY(0);
+    gltf.scene.rotateY(0)
+  
   },
   (xhr) => {
     console.log((xhr.loaded / xhr.total) * 100 + "% loaded");
@@ -472,7 +475,7 @@ if (runMixer) {
 // camera.position.x = 500 * Math.sin(cameraRotation);
 //  camera.position.z = 500 * Math.cos(cameraRotation);
   
-  // centerBox.rotateY(Math.sin(cameraRotation));
+  centerBox.rotateY(Math.sin(cameraRotation));
 //console.log(camera.position)
 
 // Handle window resize
@@ -500,11 +503,12 @@ window.addEventListener('resize', () => {
     //  roller.position.z = camera.rotation.y * 120;
   });
   const time = Date.now() * 0.0005;
- //  scooterloader.position.x = Math.sin(time * 0.7) * 470;
- // scooterloader.position.z = Math.cos(time * 0.7) * 470;
+  scooterLoaderx = Math.sin(time * 0.7) * 235;
+ scooterLoaderz = Math.cos(time * 0.7) * 235;
+  
   //  roller.position.x = Math.sin(time * 0.7) * 270;
   //  roller.position.z = Math.cos(time * 0.7) * 270;
-  //centerBox.rotateY(0.00001);
+  centerBox.rotateY(0.00001);
   for (var i = 0; i < cloudCount; i++) {
     cloudList[i].position.x += 0.9;
   }
