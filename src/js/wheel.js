@@ -57,9 +57,9 @@ const texture = new THREE.CanvasTexture(canvas);
 scene.background = texture;
 const orbit = new OrbitControls(camera, renderer.domElement);
 orbit.maxDistance = 500.0
-orbit.minDistance = 50.0
-orbit.minPolarAngle = 1.0
-orbit.maxPolarAngle = 1.5 
+orbit.minDistance = 250.0
+orbit.minPolarAngle = 0.8
+orbit.maxPolarAngle = 1.3
 
 orbit.enableRotate = true
 
