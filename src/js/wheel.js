@@ -191,13 +191,13 @@ islandloader.load(
           centerIsland.rotateY(-0.09)
           setTimeout(function () {
             
-          }, 2000);
+          }, 1500);
         }
         if (e.key == "ArrowLeft") {
             centerIsland.rotateY(0.09);
           setTimeout(function () {
          
-          }, 2000);
+          }, 1500);
         }
       });
     centerIsland.add(gltf.scene);
@@ -217,7 +217,7 @@ loader.setDRACOLoader(dracoLoader)
 loader.load(
     '../cyclist.glb',
   function (gltf) {
-       centerBox.add(gltf.scene);
+       scene.add(gltf.scene);
         gltf.scene.traverse(function (child) {
             if ((child).isMesh) {
                 const m = child 
@@ -459,96 +459,96 @@ manloader.load(
 );
 
 const tree1 = new Tree().getTree(2)
-scene.add(tree1)
+centerIsland.add(tree1)
 tree1.position.y = 100;
 tree1.position.x = 30;
 tree1.position.z = 60;
 
 const tree2 = new Tree().getTree(1.5);
-scene.add(tree2);
+centerIsland.add(tree2);
 tree2.position.y = 45;
 tree2.position.z = 100;
 
 const tree3 = new Tree().getTree(1);
-scene.add(tree3);
+centerIsland.add(tree3);
 tree3.position.y = 35;
 tree3.position.x = 10;
 
 const tree4 = new Tree().getTree(1.5);
-scene.add(tree4);
+centerIsland.add(tree4);
 tree4.position.y = 45;
 tree4.position.x = 15;
 tree4.position.z = 50;
 
 const tree5 = new Tree().getTree(1.5);
-scene.add(tree5);
+centerIsland.add(tree5);
 tree5.position.y = 145;
 tree5.position.x = 10;
 tree5.position.z = 15;
 
 const tree6 = new Tree().getTree(1);
-scene.add(tree6);
+centerIsland.add(tree6);
 tree6.position.y = 35;
 tree6.position.x = 100;
 tree6.position.z = 70;
 
 const tree7 = new Tree().getTree(2.0);
-scene.add(tree7);
+centerIsland.add(tree7);
 tree7.position.y = 135;
 tree7.position.x = -23;
 tree7.position.z = 25;
 
 const tree8 = new Tree().getTree(1);
-scene.add(tree8);
+centerIsland.add(tree8);
 tree8.position.y = 125;
 tree8.position.x = -7;
 tree8.position.z = 5;
 
 const tree9 = new Tree().getTree(1.5);
-scene.add(tree9);
+centerIsland.add(tree9);
 tree9.position.y = 125;
 tree9.position.x = 2;
 tree9.position.z = -10;
 
 const tree10 = new Tree().getTree(1.5);
-scene.add(tree10);
+centerIsland.add(tree10);
 tree10.position.y = 115;
 tree10.position.x = 5;
 tree10.position.z = 20;
 
 const tree11 = new Tree().getTree(1);
-scene.add(tree11);
+centerIsland.add(tree11);
 tree11.position.y = 105;
 tree11.position.x = 20;
 tree11.position.z = 20;
 
 const tree12 = new Tree().getTree(1);
-scene.add(tree12);
+centerIsland.add(tree12);
 tree12.position.y = 75;
 tree12.position.x = 100;
 
 // tree out of the rings
 
 const tree13 = new Tree().getTree(1);
-scene.add(tree13);
+centerIsland.add(tree13);
 tree13.position.y = 15;
 tree13.position.x = 205;
 tree13.position.z = 105;
 
 const tree14 = new Tree().getTree(1.5);
-scene.add(tree14);
+centerIsland.add(tree14);
 tree14.position.y = 25;
 tree14.position.x = 205;
 tree14.position.z = 205;
 
 const tree15 = new Tree().getTree(1);
-scene.add(tree15);
+centerIsland.add(tree15);
 tree15.position.y = 15;
 tree15.position.x = -205;
 tree15.position.z = 205;
 
 const tree16 = new Tree().getTree(1.5);
-scene.add(tree16);
+centerIsland.add(tree16);
 tree16.position.y = 25;
 tree16.position.x = -205;
 tree16.position.z = -205;
@@ -599,7 +599,7 @@ function animate() {
   scooterLoaderz = Math.cos(time * 0.7) * 240;
 
 if (runMixer) {
-  runMixer.update(0.04);
+  runMixer.update(0.06);
   }
   
   
