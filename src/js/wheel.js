@@ -16,8 +16,10 @@ const ringInnerRadius = 200
 const rollerRadius = 8
 const shadowCameraArea = 4050;
 const rollerSpeedMultiplier = 30
-const mapShadowSize = 8096
+const mapShadowSize = 12096
 const waterBodyColor = 0xb7d4ff
+let scooterLady
+let cyclistRun = false
 
 
 let scooterLoaderx, scooterLoaderz;
@@ -97,8 +99,9 @@ const boxMat = new THREE.MeshStandardMaterial({
  
 });
 const centerBox = new THREE.Mesh(boxGeo, boxMat);
+const centerBox1 = new THREE.Mesh(boxGeo, boxMat)
 
-
+scene.add(centerBox, centerBox1)
 
 // const rollerGeo = new THREE.SphereGeometry(rollerRadius, 800);
 // const rollerMat = new THREE.MeshStandardMaterial({
@@ -123,9 +126,9 @@ ring.position.y = 0.5;
 // ring.castShadow = true
 ring.receiveShadow = true
 
-const directionalLight = new THREE.DirectionalLight(0xffffff, 8.0);
+const directionalLight = new THREE.DirectionalLight(0xffffff, 4.0);
 scene.add(directionalLight);
-directionalLight.position.set(540,250,240)
+directionalLight.position.set(240,450,240)
 directionalLight.castShadow = true
 directionalLight.shadow.camera.bottom = -shadowCameraArea;
 directionalLight.shadow.camera.top = shadowCameraArea;
@@ -143,9 +146,13 @@ directionalLight.shadow.mapSize.height = mapShadowSize;
 // const cameraHelper = new THREE.CameraHelper(directionalLight.shadow.camera)
 // scene.add(cameraHelper)
 
+
+const axesHelper = new THREE.AxesHelper(4000)
+axesHelper.position.y = 30
+scene.add(axesHelper)
 //const controls = new DragControls([plane], camera, renderer.domElement);
 
-scene.add(centerBox, plane, ring);
+// scene.add( plane, ring);
 //scene.add(plane);
 //centerBox.add(roller);
 
@@ -215,22 +222,22 @@ loader.load(
           }
                 let model = gltf.scene;
           runMixer = new THREE.AnimationMixer(model);
-                animationAction = runMixer.clipAction(gltf.animations[0])
-                animationAction.play();
-             centerBox.rotateY(rollerSpeed);
+          animationAction = runMixer.clipAction(gltf.animations[0])
+          animationAction.clampWhenFinished = true
                 window.addEventListener("keydown", (e) => {
                   if (e.key == "ArrowRight") {
-                    centerBox.rotateY(rollerSpeed);
+                    animationAction.play();
+                   animationAction.paused = false;
                     setTimeout(function () {
-                    animationAction.halt(2);
-                    }, 3000);
+                    animationAction.paused = true
+                    }, 2000);
                   }
                   if (e.key == "ArrowLeft") {
-                    centerBox.rotateY(-rollerSpeed);
-                    animationAction.play();
+                     animationAction.play();
+                    animationAction.paused = false;
                     setTimeout(function () {
-                      animationAction.stop();
-                    }, 3000);
+                     animationAction.paused = true;
+                    }, 2000);
                   }
                 });
 
@@ -313,13 +320,13 @@ scooterloader.load(
         }
       });
 
-    scene.add(gltf.scene);
-
+    centerBox1.add(gltf.scene);
+   scooterLady = gltf.scene
     gltf.scene.scale.set(8, 8, 8);
     gltf.scene.position.x = scooterLoaderx;
      gltf.scene.position.z = scooterLoaderz;
     gltf.scene.position.y = 0 + islandY;
-    gltf.scene.rotateY(0)
+    
   
   },
   (xhr) => {
@@ -330,13 +337,119 @@ scooterloader.load(
   }
 );
 
+const mugloader = new GLTFLoader();
+mugloader.setDRACOLoader(dracoLoader);
+mugloader.load(
+  "../mug.glb",
+  function (gltf) {
+    gltf.scene.traverse(function (child) {
+      if (child.isMesh) {
+        const m = child;
+        //m.receiveShadow = true;
+        m.castShadow = true;
+      }
+      if (child.isLight) {
+        const l = child;
+        l.castShadow = true;
+        l.shadow.bias = -0.003;
+        l.shadow.mapSize.width = 2048;
+        l.shadow.mapSize.height = 2048;
+      }
+    });
 
+    scene.add(gltf.scene);
 
+    gltf.scene.scale.set(28, 28, 28);
+    gltf.scene.position.x = -130;
+    gltf.scene.position.z = -130;
+    gltf.scene.position.y = 0 + islandY;
+    gltf.scene.rotateY(0);
+  },
+  (xhr) => {
+    console.log((xhr.loaded / xhr.total) * 100 + "% loaded");
+  },
+  (error) => {
+    console.log("errrrrrrr", error);
+  }
+);
 
-const tree1 = new Tree().getTree(1)
+const roboloader = new GLTFLoader();
+roboloader.setDRACOLoader(dracoLoader);
+roboloader.load(
+  "../robo.glb",
+  function (gltf) {
+    gltf.scene.traverse(function (child) {
+      if (child.isMesh) {
+        const m = child;
+        //m.receiveShadow = true;
+        m.castShadow = true;
+      }
+      if (child.isLight) {
+        const l = child;
+        l.castShadow = true;
+        l.shadow.bias = -0.003;
+        l.shadow.mapSize.width = 2048;
+        l.shadow.mapSize.height = 2048;
+      }
+    });
+
+    scene.add(gltf.scene);
+
+    gltf.scene.scale.set(18, 18, 18);
+    gltf.scene.position.x = -30;
+    gltf.scene.position.z = -190;
+    gltf.scene.position.y = 0 + islandY;
+    gltf.scene.rotation.y = 9.0;
+  },
+  (xhr) => {
+    console.log((xhr.loaded / xhr.total) * 100 + "% loaded");
+  },
+  (error) => {
+    console.log("errrrrrrr", error);
+  }
+);
+
+const manloader = new GLTFLoader();
+manloader.setDRACOLoader(dracoLoader);
+manloader.load(
+  "../man.glb",
+  function (gltf) {
+    gltf.scene.traverse(function (child) {
+      if (child.isMesh) {
+        const m = child;
+        //m.receiveShadow = true;
+        m.castShadow = true;
+      }
+      if (child.isLight) {
+        const l = child;
+        l.castShadow = true;
+        l.shadow.bias = -0.003;
+        l.shadow.mapSize.width = 2048;
+        l.shadow.mapSize.height = 2048;
+      }
+    });
+
+    scene.add(gltf.scene);
+
+    gltf.scene.scale.set(18, 18, 18);
+    gltf.scene.position.x = -60;
+    gltf.scene.position.z = 190;
+    gltf.scene.position.y = 0 + islandY;
+    gltf.scene.rotation.y = 0.0;
+  },
+  (xhr) => {
+    console.log((xhr.loaded / xhr.total) * 100 + "% loaded");
+  },
+  (error) => {
+    console.log("errrrrrrr", error);
+  }
+);
+
+const tree1 = new Tree().getTree(2)
 scene.add(tree1)
-tree1.position.y = 35;
-tree1.position.x = 100;
+tree1.position.y = 100;
+tree1.position.x = 30;
+tree1.position.z = 60;
 
 const tree2 = new Tree().getTree(1.5);
 scene.add(tree2);
@@ -356,7 +469,7 @@ tree4.position.z = 50;
 
 const tree5 = new Tree().getTree(1.5);
 scene.add(tree5);
-tree5.position.y = 45;
+tree5.position.y = 145;
 tree5.position.x = 10;
 tree5.position.z = 15;
 
@@ -398,7 +511,7 @@ tree11.position.z = 20;
 
 const tree12 = new Tree().getTree(1);
 scene.add(tree12);
-tree12.position.y = 85;
+tree12.position.y = 75;
 tree12.position.x = 100;
 
 // tree out of the rings
@@ -468,9 +581,12 @@ scene.add(...allSmallTree())
 
 function animate() {
   //Self-rotation
+  const time = Date.now() * 0.0005;
+  scooterLoaderx = Math.sin(time * 0.7) * 240;
+  scooterLoaderz = Math.cos(time * 0.7) * 240;
 
 if (runMixer) {
-  runMixer.update(0.01);
+  runMixer.update(0.04);
 }
 // camera.position.x = 500 * Math.sin(cameraRotation);
 //  camera.position.z = 500 * Math.cos(cameraRotation);
@@ -502,9 +618,7 @@ window.addEventListener('resize', () => {
     // roller.position.x = Math.sin(time * 0.7) * 270;
     //  roller.position.z = camera.rotation.y * 120;
   });
-  const time = Date.now() * 0.0005;
-  scooterLoaderx = Math.sin(time * 0.7) * 235;
- scooterLoaderz = Math.cos(time * 0.7) * 235;
+
   
   //  roller.position.x = Math.sin(time * 0.7) * 270;
   //  roller.position.z = Math.cos(time * 0.7) * 270;
@@ -517,9 +631,8 @@ window.addEventListener('resize', () => {
   camera.lookAt(0, 0, 0);
 
 
-  // cloud.rotation.x += 0.001;
-  // cloud.rotation.y += 0.001;
-
+  centerBox1.rotation.y -= 0.01;
+//scooterLady.rotation.y -= 0.01
   renderer.render(scene, camera);
 }
 
