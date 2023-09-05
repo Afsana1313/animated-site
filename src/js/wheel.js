@@ -352,9 +352,11 @@ scooterloader.load(
 
 const mugloader = new GLTFLoader();
 mugloader.setDRACOLoader(dracoLoader);
+let mug;
 mugloader.load(
   "../mug.glb",
   function (gltf) {
+    mug = gltf.scene;
     gltf.scene.traverse(function (child) {
       if (child.isMesh) {
         const m = child;
@@ -391,20 +393,25 @@ roboloader.setDRACOLoader(dracoLoader);
 roboloader.load(
   "../robo.glb",
   function (gltf) {
-    gltf.scene.traverse(function (child) {
-      if (child.isMesh) {
-        const m = child;
-        //m.receiveShadow = true;
-        m.castShadow = true;
-      }
-      if (child.isLight) {
-        const l = child;
-        l.castShadow = true;
-        l.shadow.bias = -0.003;
-        l.shadow.mapSize.width = 2048;
-        l.shadow.mapSize.height = 2048;
-      }
-    });
+       gltf.scene.traverse(function (child) {
+         if (child.isMesh) {
+           const m = child;
+           //m.receiveShadow = true;
+           m.castShadow = true;
+         }
+         if (child.isLight) {
+           const l = child;
+           l.castShadow = true;
+           l.shadow.bias = -0.003;
+           l.shadow.mapSize.width = 2048;
+           l.shadow.mapSize.height = 2048;
+         }
+         let model = gltf.scene;
+         runMixer = new THREE.AnimationMixer(model);
+         animationAction = runMixer.clipAction(gltf.animations[14]);
+         //console.log(gltf.animations);
+         animationAction.play();
+       });
 
      centerIsland.add(gltf.scene);
 
@@ -421,6 +428,10 @@ roboloader.load(
     console.log("errrrrrrr", error);
   }
 );
+
+const shirtColor = new THREE.Color();
+const shirtPalette = [0xfa6d6d, 0xffffff];
+const skinPalette = [0x8d5524, 0xc68642, 0xe0ac69, 0xf1c27d, 0xffdbac];
 
 const manloader = new GLTFLoader();
 manloader.setDRACOLoader(dracoLoader);
@@ -441,7 +452,22 @@ manloader.load(
         l.shadow.mapSize.height = 2048;
       }
     });
-
+   gltf.scene.getObjectByName("shirt").traverse(function (node) {
+     if (node.isMesh) {
+       shirtColor.setHex(
+         shirtPalette[Math.floor(Math.random() * shirtPalette.length)]
+       );
+       node.material.color.set(shirtColor).convertSRGBToLinear();
+     }
+   });
+   gltf.scene.getObjectByName("body").traverse(function (node) {
+     if (node.isMesh) {
+       shirtColor.setHex(
+         skinPalette[Math.floor(Math.random() * skinPalette.length)]
+       );
+       node.material.color.set(shirtColor).convertSRGBToLinear();
+     }
+   });
    centerIsland.add(gltf.scene);
 
     gltf.scene.scale.set(18, 18, 18);
@@ -597,6 +623,10 @@ function animate() {
   const time = Date.now() * 0.0005;
   scooterLoaderx = Math.sin(time * 0.7) * 240;
   scooterLoaderz = Math.cos(time * 0.7) * 240;
+
+ if (mug) {
+   mug.rotation.y -= 0.04;
+ }
 
 if (runMixer) {
   runMixer.update(0.06);
