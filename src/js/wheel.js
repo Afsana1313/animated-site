@@ -188,13 +188,13 @@ islandloader.load(
  // island k ghurie kono lav nei..camera kei ghurate hobe
       window.addEventListener("keydown", (e) => {
         if (e.key == "ArrowRight") {
-          centerIsland.rotateY(-0.09)
+          centerIsland.rotateY(-0.05)
           setTimeout(function () {
             
           }, 1500);
         }
         if (e.key == "ArrowLeft") {
-            centerIsland.rotateY(0.09);
+            centerIsland.rotateY(0.05);
           setTimeout(function () {
          
           }, 1500);
@@ -484,6 +484,202 @@ manloader.load(
   }
 );
 
+const manloader4 = new GLTFLoader();
+manloader4.setDRACOLoader(dracoLoader);
+manloader4.load(
+  "../man.glb",
+  function (gltf) {
+    gltf.scene.traverse(function (child) {
+      if (child.isMesh) {
+        const m = child;
+        //m.receiveShadow = true;
+        m.castShadow = true;
+      }
+      if (child.isLight) {
+        const l = child;
+        l.castShadow = true;
+        l.shadow.bias = -0.003;
+        l.shadow.mapSize.width = 2048;
+        l.shadow.mapSize.height = 2048;
+      }
+    });
+    gltf.scene.getObjectByName("shirt").traverse(function (node) {
+      if (node.isMesh) {
+        shirtColor.setHex(
+          shirtPalette[Math.floor(Math.random() * shirtPalette.length)]
+        );
+        node.material.color.set(shirtColor).convertSRGBToLinear();
+      }
+    });
+  
+    centerIsland.add(gltf.scene);
+
+    gltf.scene.scale.set(18, 18, 18);
+    gltf.scene.position.x = -150;
+    gltf.scene.position.z = 100;
+    gltf.scene.position.y = 0 + islandY;
+    gltf.scene.rotation.y = 5.0;
+  },
+  (xhr) => {
+    console.log((xhr.loaded / xhr.total) * 100 + "% loaded");
+  },
+  (error) => {
+    console.log("errrrrrrr", error);
+  }
+);
+
+const manloader1 = new GLTFLoader();
+manloader1.setDRACOLoader(dracoLoader);
+manloader1.load(
+  "../man.glb",
+  function (gltf) {
+    gltf.scene.traverse(function (child) {
+      if (child.isMesh) {
+        const m = child;
+        //m.receiveShadow = true;
+        m.castShadow = true;
+      }
+      if (child.isLight) {
+        const l = child;
+        l.castShadow = true;
+        l.shadow.bias = -0.003;
+        l.shadow.mapSize.width = 2048;
+        l.shadow.mapSize.height = 2048;
+      }
+    });
+    gltf.scene.getObjectByName("shirt").traverse(function (node) {
+      if (node.isMesh) {
+        shirtColor.setHex(
+          shirtPalette[Math.floor(Math.random() * shirtPalette.length)]
+        );
+        node.material.color.set(shirtColor).convertSRGBToLinear();
+      }
+    });
+    gltf.scene.getObjectByName("body").traverse(function (node) {
+      if (node.isMesh) {
+        shirtColor.setHex(
+          skinPalette[Math.floor(Math.random() * skinPalette.length)]
+        );
+        node.material.color.set(shirtColor).convertSRGBToLinear();
+      }
+    });
+    centerIsland.add(gltf.scene);
+
+    gltf.scene.scale.set(18, 18, 18);
+    gltf.scene.position.x = -160;
+    gltf.scene.position.z = 90;
+    gltf.scene.position.y = 0 + islandY;
+    gltf.scene.rotation.y = 0.0;
+  },
+  (xhr) => {
+    console.log((xhr.loaded / xhr.total) * 100 + "% loaded");
+  },
+  (error) => {
+    console.log("errrrrrrr", error);
+  }
+);
+
+const manloader2 = new GLTFLoader();
+manloader2.setDRACOLoader(dracoLoader);
+manloader2.load(
+  "../man.glb",
+  function (gltf) {
+    gltf.scene.traverse(function (child) {
+      if (child.isMesh) {
+        const m = child;
+        //m.receiveShadow = true;
+        m.castShadow = true;
+      }
+      if (child.isLight) {
+        const l = child;
+        l.castShadow = true;
+        l.shadow.bias = -0.003;
+        l.shadow.mapSize.width = 2048;
+        l.shadow.mapSize.height = 2048;
+      }
+    });
+    gltf.scene.getObjectByName("shirt").traverse(function (node) {
+      if (node.isMesh) {
+        shirtColor.setHex(
+          shirtPalette[Math.floor(Math.random() * shirtPalette.length)]
+        );
+        node.material.color.set(shirtColor).convertSRGBToLinear();
+      }
+    });
+    gltf.scene.getObjectByName("body").traverse(function (node) {
+      if (node.isMesh) {
+        shirtColor.setHex(
+          skinPalette[Math.floor(Math.random() * skinPalette.length)]
+        );
+        node.material.color.set(shirtColor).convertSRGBToLinear();
+      }
+    });
+    centerIsland.add(gltf.scene);
+
+    gltf.scene.scale.set(18, 18, 18);
+    gltf.scene.position.x = -175;
+    gltf.scene.position.z = 95;
+    gltf.scene.position.y = 0 + islandY;
+    gltf.scene.rotation.y = 0.0;
+  },
+  (xhr) => {
+    console.log((xhr.loaded / xhr.total) * 100 + "% loaded");
+  },
+  (error) => {
+    console.log("errrrrrrr", error);
+  }
+);
+const manloader3 = new GLTFLoader();
+manloader3.setDRACOLoader(dracoLoader);
+manloader3.load(
+  "../man.glb",
+  function (gltf) {
+    gltf.scene.traverse(function (child) {
+      if (child.isMesh) {
+        const m = child;
+        //m.receiveShadow = true;
+        m.castShadow = true;
+      }
+      if (child.isLight) {
+        const l = child;
+        l.castShadow = true;
+        l.shadow.bias = -0.003;
+        l.shadow.mapSize.width = 2048;
+        l.shadow.mapSize.height = 2048;
+      }
+    });
+    gltf.scene.getObjectByName("shirt").traverse(function (node) {
+      if (node.isMesh) {
+        shirtColor.setHex(
+          shirtPalette[Math.floor(Math.random() * shirtPalette.length)]
+        );
+        node.material.color.set(shirtColor).convertSRGBToLinear();
+      }
+    });
+    gltf.scene.getObjectByName("body").traverse(function (node) {
+      if (node.isMesh) {
+        shirtColor.setHex(
+          skinPalette[Math.floor(Math.random() * skinPalette.length)]
+        );
+        node.material.color.set(shirtColor).convertSRGBToLinear();
+      }
+    });
+    centerIsland.add(gltf.scene);
+
+    gltf.scene.scale.set(18, 18, 18);
+    gltf.scene.position.x = -175;
+    gltf.scene.position.z = 115;
+    gltf.scene.position.y = 0 + islandY;
+    gltf.scene.rotation.y = -5.0;
+  },
+  (xhr) => {
+    console.log((xhr.loaded / xhr.total) * 100 + "% loaded");
+  },
+  (error) => {
+    console.log("errrrrrrr", error);
+  }
+);
+
 const tree1 = new Tree().getTree(2)
 centerIsland.add(tree1)
 tree1.position.y = 100;
@@ -629,7 +825,7 @@ function animate() {
  }
 
 if (runMixer) {
-  runMixer.update(0.06);
+  runMixer.update(0.1);
   }
   
   
