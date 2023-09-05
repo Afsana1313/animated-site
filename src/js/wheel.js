@@ -11,11 +11,11 @@ import {allSmallTree} from './smallTree'
 import { DRACOLoader } from "three/addons/loaders/DRACOLoader.js";
 
 
-const rollerSpeed = 0.00004
+const rollerSpeed = 0.004
 const ringInnerRadius = 200
 const rollerRadius = 8
 const shadowCameraArea = 4050;
-const rollerSpeedMultiplier = 30
+const rollerSpeedMultiplier = 300
 const mapShadowSize = 12096
 const waterBodyColor = 0xb7d4ff
 let scooterLady
@@ -63,7 +63,7 @@ orbit.maxPolarAngle = 1.3
 
 orbit.enableRotate = true
 
-camera.position.set(270, 70,200);
+camera.position.set(330, 70,0);
 
 orbit.update();
 
@@ -100,8 +100,8 @@ const boxMat = new THREE.MeshStandardMaterial({
 });
 const centerBox = new THREE.Mesh(boxGeo, boxMat);
 const centerBox1 = new THREE.Mesh(boxGeo, boxMat)
-
-scene.add(centerBox, centerBox1)
+const centerIsland = new THREE.Mesh(boxGeo, boxMat);
+scene.add(centerBox, centerBox1, centerIsland);
 
 // const rollerGeo = new THREE.SphereGeometry(rollerRadius, 800);
 // const rollerMat = new THREE.MeshStandardMaterial({
@@ -178,21 +178,31 @@ islandloader.load(
       if (child.isMesh) {
         const m = child;
         m.receiveShadow = true;
-        //m.castShadow = true;
       }
       if (child.isLight) {
         const l = child;
-      //  l.castShadow = true;
-      //  l.shadow.bias = -0.003;
         l.shadow.mapSize.width = 2048;
         l.shadow.mapSize.height = 2048;
       }
     });
-    scene.add(gltf.scene);
+ // island k ghurie kono lav nei..camera kei ghurate hobe
+      window.addEventListener("keydown", (e) => {
+        if (e.key == "ArrowRight") {
+          centerIsland.rotateY(-0.09)
+          setTimeout(function () {
+            
+          }, 2000);
+        }
+        if (e.key == "ArrowLeft") {
+            centerIsland.rotateY(0.09);
+          setTimeout(function () {
+         
+          }, 2000);
+        }
+      });
+    centerIsland.add(gltf.scene);
     gltf.scene.scale.set(20, 20, 20);
-   // gltf.scene.position.x = 210;
     gltf.scene.position.y = islandY;
-   // gltf.scene.rotateY(-30);
   },
   (xhr) => {
     console.log((xhr.loaded / xhr.total) * 100 + "% loaded");
@@ -206,7 +216,8 @@ const loader = new GLTFLoader()
 loader.setDRACOLoader(dracoLoader)
 loader.load(
     '../cyclist.glb',
-    function (gltf) {
+  function (gltf) {
+       centerBox.add(gltf.scene);
         gltf.scene.traverse(function (child) {
             if ((child).isMesh) {
                 const m = child 
@@ -244,9 +255,11 @@ loader.load(
           
         })
 
-      centerBox.add(gltf.scene)
+     
 
       gltf.scene.scale.set(8, 8, 8)
+     // gltf.scene.position.x = 220 * Math.sin(cameraRotation);
+    //  gltf.scene.position.z = 220 * Math.cos(cameraRotation);
       gltf.scene.position.x = 235
        gltf.scene.position.y = 0 + islandY
       gltf.scene.rotateY(-30)
@@ -284,7 +297,7 @@ clapperloader.load(
       animationAction.play();
     });
 
-    scene.add(gltf.scene);
+    centerIsland.add(gltf.scene);
 
     gltf.scene.scale.set(30, 30, 30);
     gltf.scene.position.x = 210;
@@ -357,7 +370,7 @@ mugloader.load(
       }
     });
 
-    scene.add(gltf.scene);
+   centerIsland.add(gltf.scene);
 
     gltf.scene.scale.set(28, 28, 28);
     gltf.scene.position.x = -130;
@@ -393,7 +406,7 @@ roboloader.load(
       }
     });
 
-    scene.add(gltf.scene);
+     centerIsland.add(gltf.scene);
 
     gltf.scene.scale.set(18, 18, 18);
     gltf.scene.position.x = -30;
@@ -429,7 +442,7 @@ manloader.load(
       }
     });
 
-    scene.add(gltf.scene);
+   centerIsland.add(gltf.scene);
 
     gltf.scene.scale.set(18, 18, 18);
     gltf.scene.position.x = -60;
@@ -557,12 +570,12 @@ scene.add(...cloudList)
 let cameraRotation = 0;
   window.addEventListener("keydown", (e) => {
     if (e.key == "ArrowRight") {
-     // centerBox.rotateY(rollerSpeed);
+       centerBox.rotateY(rollerSpeed);
       cameraRotation += rollerSpeedMultiplier * rollerSpeed;
      // roller.rotateX(-rollerSpeedMultiplier * rollerSpeed);
     }
     if (e.key == "ArrowLeft") {
-    //  centerBox.rotateY(-rollerSpeed);
+      centerBox.rotateY(-rollerSpeed);
 
    //   roller.rotateX(rollerSpeedMultiplier * rollerSpeed);
       cameraRotation -= rollerSpeedMultiplier * rollerSpeed;
@@ -587,11 +600,13 @@ function animate() {
 
 if (runMixer) {
   runMixer.update(0.04);
-}
-// camera.position.x = 500 * Math.sin(cameraRotation);
-//  camera.position.z = 500 * Math.cos(cameraRotation);
+  }
   
-  centerBox.rotateY(Math.sin(cameraRotation));
+  
+//camera.position.x = 350 * Math.sin(cameraRotation);
+// camera.position.z = 350 * Math.cos(cameraRotation);
+  
+//  centerBox.rotateY(Math.sin(cameraRotation));
 //console.log(camera.position)
 
 // Handle window resize
@@ -622,7 +637,7 @@ window.addEventListener('resize', () => {
   
   //  roller.position.x = Math.sin(time * 0.7) * 270;
   //  roller.position.z = Math.cos(time * 0.7) * 270;
-  centerBox.rotateY(0.00001);
+
   for (var i = 0; i < cloudCount; i++) {
     cloudList[i].position.x += 0.9;
   }
