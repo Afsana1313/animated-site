@@ -4,34 +4,32 @@ import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 //import gsap from 'gsap';
 //import { DragControls } from "three/addons/controls/DragControls.js";
 // import * as GUI from "dat.gui";
-import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader"; 
+import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 import { cloud } from "./cloud";
-import {Tree} from './tree'
-import {allSmallTree} from './smallTree'
+import { Tree } from "./tree";
+import { allSmallTree } from "./smallTree";
 import { DRACOLoader } from "three/addons/loaders/DRACOLoader.js";
 
-
-const rollerSpeed = 0.004
-const ringInnerRadius = 200
-const rollerRadius = 8
+const rollerSpeed = 0.004;
+const ringInnerRadius = 200;
+const rollerRadius = 8;
 const shadowCameraArea = 4050;
-const rollerSpeedMultiplier = 300
-const mapShadowSize = 12096
-const waterBodyColor = 0xb7d4ff
-let scooterLady
-let cyclistRun = false
-
+const rollerSpeedMultiplier = 300;
+const mapShadowSize = 12096;
+const waterBodyColor = 0xb7d4ff;
+let scooterLady;
+let cyclistRun = false;
 
 let scooterLoaderx, scooterLoaderz;
 
-const islandY = 50
+const islandY = 50;
 
 const renderer = new THREE.WebGLRenderer();
-renderer.alpha
-renderer.shadowMap.enabled = true
+renderer.alpha;
+renderer.shadowMap.enabled = true;
 renderer.setSize(window.innerWidth, window.innerHeight);
 
-document.getElementById('drawing-site').appendChild(renderer.domElement);
+document.getElementById("drawing-site").appendChild(renderer.domElement);
 
 const scene = new THREE.Scene();
 scene.background = new THREE.Color(0xffa500);
@@ -56,31 +54,29 @@ context.fillRect(0, 0, canvas.width, canvas.height);
 const texture = new THREE.CanvasTexture(canvas);
 scene.background = texture;
 const orbit = new OrbitControls(camera, renderer.domElement);
-orbit.maxDistance = 500.0
-orbit.minDistance = 250.0
-orbit.minPolarAngle = 0.8
-orbit.maxPolarAngle = 1.3
+orbit.maxDistance = 500.0;
+orbit.minDistance = 250.0;
+orbit.minPolarAngle = 0.8;
+orbit.maxPolarAngle = 1.3;
 
-orbit.enableRotate = true
+orbit.enableRotate = true;
 
-camera.position.set(330, 70,0);
+camera.position.set(330, 70, 0);
 
 orbit.update();
-
 
 const ambientLight = new THREE.AmbientLight(0x333333);
 scene.add(ambientLight);
 
-const waterBodyGeo = new THREE.CircleGeometry(3000, 300,3000)
+const waterBodyGeo = new THREE.CircleGeometry(3000, 300, 3000);
 const waterBodyMat = new THREE.MeshStandardMaterial({
   color: waterBodyColor
 });
-const waterBody = new THREE.Mesh(waterBodyGeo, waterBodyMat)
-scene.add(waterBody)
-waterBody.rotation.x = -0.5 * Math.PI
-waterBody.position.y = -10
-waterBody.receiveShadow = true
-
+const waterBody = new THREE.Mesh(waterBodyGeo, waterBodyMat);
+scene.add(waterBody);
+waterBody.rotation.x = -0.5 * Math.PI;
+waterBody.position.y = -10;
+waterBody.receiveShadow = true;
 
 const textureLoader = new THREE.TextureLoader();
 
@@ -91,15 +87,12 @@ const planeMat = new THREE.MeshPhongMaterial({
 });
 const plane = new THREE.Mesh(planeGeo, planeMat);
 plane.rotation.x = 0.5 * Math.PI;
-plane.receiveShadow = true
-
+plane.receiveShadow = true;
 
 const boxGeo = new THREE.BoxGeometry(1, 1);
-const boxMat = new THREE.MeshStandardMaterial({
- 
-});
+const boxMat = new THREE.MeshStandardMaterial({});
 const centerBox = new THREE.Mesh(boxGeo, boxMat);
-const centerBox1 = new THREE.Mesh(boxGeo, boxMat)
+const centerBox1 = new THREE.Mesh(boxGeo, boxMat);
 const centerIsland = new THREE.Mesh(boxGeo, boxMat);
 scene.add(centerBox, centerBox1, centerIsland);
 
@@ -113,31 +106,34 @@ scene.add(centerBox, centerBox1, centerIsland);
 // roller.castShadow = true
 // centerBox.castShadow = true;
 
-
-
-const ringGeo = new THREE.RingGeometry(ringInnerRadius, ringInnerRadius + rollerRadius + 10,500,500)
+const ringGeo = new THREE.RingGeometry(
+  ringInnerRadius,
+  ringInnerRadius + rollerRadius + 10,
+  500,
+  500
+);
 const ringMat = new THREE.MeshStandardMaterial({
   color: 0x707eff,
   side: THREE.DoubleSide
 });
-const ring = new THREE.Mesh(ringGeo, ringMat)
+const ring = new THREE.Mesh(ringGeo, ringMat);
 ring.rotation.x = -0.5 * Math.PI;
 ring.position.y = 0.5;
 // ring.castShadow = true
-ring.receiveShadow = true
+ring.receiveShadow = true;
 
 const directionalLight = new THREE.DirectionalLight(0xffffff, 4.0);
 scene.add(directionalLight);
-directionalLight.position.set(240,450,240)
-directionalLight.castShadow = true
+directionalLight.position.set(240, 450, 240);
+directionalLight.castShadow = true;
 directionalLight.shadow.camera.bottom = -shadowCameraArea;
 directionalLight.shadow.camera.top = shadowCameraArea;
 directionalLight.shadow.camera.left = -shadowCameraArea;
 directionalLight.shadow.camera.right = shadowCameraArea;
-directionalLight.shadow.camera.far = 4000
+directionalLight.shadow.camera.far = 4000;
 directionalLight.shadow.camera.near = 1;
 
-directionalLight.shadow.mapSize.width = mapShadowSize
+directionalLight.shadow.mapSize.width = mapShadowSize;
 directionalLight.shadow.mapSize.height = mapShadowSize;
 
 // const directionalLightHelper = new THREE.DirectionalLightHelper(directionalLight, 20)
@@ -146,26 +142,23 @@ directionalLight.shadow.mapSize.height = mapShadowSize;
 // const cameraHelper = new THREE.CameraHelper(directionalLight.shadow.camera)
 // scene.add(cameraHelper)
 
-
-const axesHelper = new THREE.AxesHelper(4000)
-axesHelper.position.y = 30
-scene.add(axesHelper)
+const axesHelper = new THREE.AxesHelper(4000);
+axesHelper.position.y = 30;
+scene.add(axesHelper);
 //const controls = new DragControls([plane], camera, renderer.domElement);
 
 // scene.add( plane, ring);
 //scene.add(plane);
 //centerBox.add(roller);
 
-
-
-let runMixer;
+let runCyclistMixer, runRoboMixer, runClapperMixer;
 let animationTime = 0;
 const movementSpeed = 0.005;
 let model;
 let animationAction;
 // Part - 2
 // Note that since Three release 148, you will find the Draco libraries in the `.\node_modules\three\examples\jsm\libs\draco\` folder.
-const dracoLoader = new DRACOLoader()
+const dracoLoader = new DRACOLoader();
 dracoLoader.setDecoderPath("../../node_modules/three/examples/jsm/libs/draco/");
 
 // island loader
@@ -185,21 +178,17 @@ islandloader.load(
         l.shadow.mapSize.height = 2048;
       }
     });
- // island k ghurie kono lav nei..camera kei ghurate hobe
-      window.addEventListener("keydown", (e) => {
-        if (e.key == "ArrowRight") {
-          centerIsland.rotateY(-0.05)
-          setTimeout(function () {
-            
-          }, 1500);
-        }
-        if (e.key == "ArrowLeft") {
-            centerIsland.rotateY(0.05);
-          setTimeout(function () {
-         
-          }, 1500);
-        }
-      });
+    // island k ghurie kono lav nei..camera kei ghurate hobe
+    window.addEventListener("keydown", (e) => {
+      if (e.key == "ArrowRight") {
+        centerIsland.rotateY(-0.05);
+        setTimeout(function () {}, 1500);
+      }
+      if (e.key == "ArrowLeft") {
+        centerIsland.rotateY(0.05);
+        setTimeout(function () {}, 1500);
+      }
+    });
     centerIsland.add(gltf.scene);
     gltf.scene.scale.set(20, 20, 20);
     gltf.scene.position.y = islandY;
@@ -212,75 +201,16 @@ islandloader.load(
   }
 );
 // cyclist loader
-const loader = new GLTFLoader()
-loader.setDRACOLoader(dracoLoader)
+const loader = new GLTFLoader();
+loader.setDRACOLoader(dracoLoader);
 loader.load(
-    '../cyclist.glb',
+  "../cyclist.glb",
   function (gltf) {
-       scene.add(gltf.scene);
-        gltf.scene.traverse(function (child) {
-            if ((child).isMesh) {
-                const m = child 
-                m.receiveShadow = true
-                m.castShadow = true
-            }
-            if ((child ).isLight) {
-                const l = child 
-                l.castShadow = true
-                l.shadow.bias = -0.003
-                l.shadow.mapSize.width = 2048
-                l.shadow.mapSize.height = 2048
-          }
-                let model = gltf.scene;
-          runMixer = new THREE.AnimationMixer(model);
-          animationAction = runMixer.clipAction(gltf.animations[0])
-          animationAction.clampWhenFinished = true
-                window.addEventListener("keydown", (e) => {
-                  if (e.key == "ArrowRight") {
-                    animationAction.play();
-                   animationAction.paused = false;
-                    setTimeout(function () {
-                    animationAction.paused = true
-                    }, 2000);
-                  }
-                  if (e.key == "ArrowLeft") {
-                     animationAction.play();
-                    animationAction.paused = false;
-                    setTimeout(function () {
-                     animationAction.paused = true;
-                    }, 2000);
-                  }
-                });
-
-          
-        })
-
-     
-
-      gltf.scene.scale.set(8, 8, 8)
-     // gltf.scene.position.x = 220 * Math.sin(cameraRotation);
-    //  gltf.scene.position.z = 220 * Math.cos(cameraRotation);
-      gltf.scene.position.x = 235
-       gltf.scene.position.y = 0 + islandY
-      gltf.scene.rotateY(-30)
-    },
-    (xhr) => {
-        console.log((xhr.loaded / xhr.total) * 100 + '% loaded')
-    },
-    (error) => {
-        console.log('errrrrrrr',error)
-    }
-)
-
-const clapperloader = new GLTFLoader();
-clapperloader.setDRACOLoader(dracoLoader);
-clapperloader.load(
-  "../clapper.glb",
-  function (gltf) {
+    scene.add(gltf.scene);
     gltf.scene.traverse(function (child) {
       if (child.isMesh) {
         const m = child;
-       //m.receiveShadow = true;
+        m.receiveShadow = true;
         m.castShadow = true;
       }
       if (child.isLight) {
@@ -291,8 +221,86 @@ clapperloader.load(
         l.shadow.mapSize.height = 2048;
       }
       let model = gltf.scene;
-      runMixer = new THREE.AnimationMixer(model);
-      animationAction = runMixer.clipAction(gltf.animations[0]);
+      runCyclistMixer = new THREE.AnimationMixer(model);
+      animationAction = runCyclistMixer.clipAction(gltf.animations[0]);
+      // animationAction.clampWhenFinished = true
+      console.log(gltf.animations);
+      animationAction.play();
+      window.addEventListener("keydown", (e) => {
+        if (e.key == "ArrowRight" || e.key == "ArrowLeft") {
+          animationAction.play();
+          // animationAction.paused = false;
+          setTimeout(function () {
+            animationAction.paused = true;
+          }, 2000);
+        }
+      });
+    });
+
+    gltf.scene.scale.set(8, 8, 8);
+    // gltf.scene.position.x = 220 * Math.sin(cameraRotation);
+    //  gltf.scene.position.z = 220 * Math.cos(cameraRotation);
+    gltf.scene.position.x = 235;
+    gltf.scene.position.y = 0 + islandY;
+    gltf.scene.rotateY(-30);
+  },
+  (xhr) => {
+    console.log((xhr.loaded / xhr.total) * 100 + "% loaded");
+  },
+  (error) => {
+    console.log("errrrrrrr", error);
+  }
+);
+
+// var cyclist;
+// var mixer2;
+// var action2;
+// loader.load("../cyclist.glb", function (gltf) {
+//   cyclist = gltf.scene;
+//   cyclist.scale.set(10.33, 10.33, 10.33);
+
+//   //Playing Animation
+//   mixer2 = new THREE.AnimationMixer(cyclist);
+//   action2 = mixer2.clipAction(gltf.animations[0]);
+//   action2.timeScale = 0;
+//   action2.play();
+
+//   gltf.scene.traverse(function (node) {
+//     if (node.isMesh) {
+//       node.castShadow = true;
+//       node.receiveShadow = true;
+//     }
+//   });
+//        // gltf.scene.scale.set(8, 8, 8)
+//        // gltf.scene.position.x = 220 * Math.sin(cameraRotation);
+//       //  gltf.scene.position.z = 220 * Math.cos(cameraRotation);
+//         gltf.scene.position.x = 235
+//          gltf.scene.position.y = 0 + islandY
+//         gltf.scene.rotateY(-30)
+//   scene.add(cyclist);
+// });
+
+const clapperloader = new GLTFLoader();
+clapperloader.setDRACOLoader(dracoLoader);
+clapperloader.load(
+  "../clapper.glb",
+  function (gltf) {
+    gltf.scene.traverse(function (child) {
+      if (child.isMesh) {
+        const m = child;
+        //m.receiveShadow = true;
+        m.castShadow = true;
+      }
+      if (child.isLight) {
+        const l = child;
+        l.castShadow = true;
+        l.shadow.bias = -0.003;
+        l.shadow.mapSize.width = 2048;
+        l.shadow.mapSize.height = 2048;
+      }
+      let model = gltf.scene;
+      runClapperMixer = new THREE.AnimationMixer(model);
+      animationAction = runClapperMixer.clipAction(gltf.animations[0]);
       //console.log(gltf.animations);
       animationAction.play();
     });
@@ -312,35 +320,32 @@ clapperloader.load(
   }
 );
 
-
 const scooterloader = new GLTFLoader();
 scooterloader.setDRACOLoader(dracoLoader);
 scooterloader.load(
   "../scooter.glb",
   function (gltf) {
-      gltf.scene.traverse(function (child) {
-        if (child.isMesh) {
-          const m = child;
-          //m.receiveShadow = true;
-          m.castShadow = true;
-        }
-        if (child.isLight) {
-          const l = child;
-          l.castShadow = true;
-          l.shadow.bias = -0.003;
-          l.shadow.mapSize.width = 2048;
-          l.shadow.mapSize.height = 2048;
-        }
-      });
+    gltf.scene.traverse(function (child) {
+      if (child.isMesh) {
+        const m = child;
+        //m.receiveShadow = true;
+        m.castShadow = true;
+      }
+      if (child.isLight) {
+        const l = child;
+        l.castShadow = true;
+        l.shadow.bias = -0.003;
+        l.shadow.mapSize.width = 2048;
+        l.shadow.mapSize.height = 2048;
+      }
+    });
 
     centerBox1.add(gltf.scene);
-   scooterLady = gltf.scene
+    scooterLady = gltf.scene;
     gltf.scene.scale.set(8, 8, 8);
     gltf.scene.position.x = scooterLoaderx;
-     gltf.scene.position.z = scooterLoaderz;
+    gltf.scene.position.z = scooterLoaderz;
     gltf.scene.position.y = 0 + islandY;
-    
-  
   },
   (xhr) => {
     console.log((xhr.loaded / xhr.total) * 100 + "% loaded");
@@ -372,7 +377,7 @@ mugloader.load(
       }
     });
 
-   centerIsland.add(gltf.scene);
+    centerIsland.add(gltf.scene);
 
     gltf.scene.scale.set(28, 28, 28);
     gltf.scene.position.x = -130;
@@ -393,27 +398,27 @@ roboloader.setDRACOLoader(dracoLoader);
 roboloader.load(
   "../robo.glb",
   function (gltf) {
-       gltf.scene.traverse(function (child) {
-         if (child.isMesh) {
-           const m = child;
-           //m.receiveShadow = true;
-           m.castShadow = true;
-         }
-         if (child.isLight) {
-           const l = child;
-           l.castShadow = true;
-           l.shadow.bias = -0.003;
-           l.shadow.mapSize.width = 2048;
-           l.shadow.mapSize.height = 2048;
-         }
-         let model = gltf.scene;
-         runMixer = new THREE.AnimationMixer(model);
-         animationAction = runMixer.clipAction(gltf.animations[14]);
-         //console.log(gltf.animations);
-         animationAction.play();
-       });
+    gltf.scene.traverse(function (child) {
+      if (child.isMesh) {
+        const m = child;
+        //m.receiveShadow = true;
+        m.castShadow = true;
+      }
+      if (child.isLight) {
+        const l = child;
+        l.castShadow = true;
+        l.shadow.bias = -0.003;
+        l.shadow.mapSize.width = 2048;
+        l.shadow.mapSize.height = 2048;
+      }
+      let model = gltf.scene;
+      runRoboMixer = new THREE.AnimationMixer(model);
+      animationAction = runRoboMixer.clipAction(gltf.animations[14]);
+      //console.log(gltf.animations);
+      animationAction.play();
+    });
 
-     centerIsland.add(gltf.scene);
+    centerIsland.add(gltf.scene);
 
     gltf.scene.scale.set(18, 18, 18);
     gltf.scene.position.x = -30;
@@ -452,23 +457,23 @@ manloader.load(
         l.shadow.mapSize.height = 2048;
       }
     });
-   gltf.scene.getObjectByName("shirt").traverse(function (node) {
-     if (node.isMesh) {
-       shirtColor.setHex(
-         shirtPalette[Math.floor(Math.random() * shirtPalette.length)]
-       );
-       node.material.color.set(shirtColor).convertSRGBToLinear();
-     }
-   });
-   gltf.scene.getObjectByName("body").traverse(function (node) {
-     if (node.isMesh) {
-       shirtColor.setHex(
-         skinPalette[Math.floor(Math.random() * skinPalette.length)]
-       );
-       node.material.color.set(shirtColor).convertSRGBToLinear();
-     }
-   });
-   centerIsland.add(gltf.scene);
+    gltf.scene.getObjectByName("shirt").traverse(function (node) {
+      if (node.isMesh) {
+        shirtColor.setHex(
+          shirtPalette[Math.floor(Math.random() * shirtPalette.length)]
+        );
+        node.material.color.set(shirtColor).convertSRGBToLinear();
+      }
+    });
+    gltf.scene.getObjectByName("body").traverse(function (node) {
+      if (node.isMesh) {
+        shirtColor.setHex(
+          skinPalette[Math.floor(Math.random() * skinPalette.length)]
+        );
+        node.material.color.set(shirtColor).convertSRGBToLinear();
+      }
+    });
+    centerIsland.add(gltf.scene);
 
     gltf.scene.scale.set(18, 18, 18);
     gltf.scene.position.x = -60;
@@ -511,7 +516,7 @@ manloader4.load(
         node.material.color.set(shirtColor).convertSRGBToLinear();
       }
     });
-  
+
     centerIsland.add(gltf.scene);
 
     gltf.scene.scale.set(18, 18, 18);
@@ -680,8 +685,8 @@ manloader3.load(
   }
 );
 
-const tree1 = new Tree().getTree(2)
-centerIsland.add(tree1)
+const tree1 = new Tree().getTree(2);
+centerIsland.add(tree1);
 tree1.position.y = 100;
 tree1.position.x = 30;
 tree1.position.z = 60;
@@ -775,44 +780,45 @@ tree16.position.y = 25;
 tree16.position.x = -205;
 tree16.position.z = -205;
 
-const cloudList = []
-const cloudCount = 1
-for (var i = 0; i < cloudCount; i++){
-  const singleCloud = new cloud().getCloud()
-  singleCloud.position.x = Math.random() * 3000 * (Math.random() > 0.5 ? -1 : 1)
-  singleCloud.position.z = Math.random() * 3000 * (Math.random() > 0.5 ? -1 : 1);
-  singleCloud.position.y = Math.random()  + 500
-  cloudList.push(singleCloud)
+const cloudList = [];
+const cloudCount = 1;
+for (var i = 0; i < cloudCount; i++) {
+  const singleCloud = new cloud().getCloud();
+  singleCloud.position.x =
+    Math.random() * 3000 * (Math.random() > 0.5 ? -1 : 1);
+  singleCloud.position.z =
+    Math.random() * 3000 * (Math.random() > 0.5 ? -1 : 1);
+  singleCloud.position.y = Math.random() + 500;
+  cloudList.push(singleCloud);
 }
-  
+
 //const cloud1 = new cloud().getCloud()
 //scene.add(cloud1);
 //cloud1.position.y = 10
-scene.add(...cloudList)
+scene.add(...cloudList);
 let cameraRotation = 0;
-  window.addEventListener("keydown", (e) => {
-    if (e.key == "ArrowRight") {
-       centerBox.rotateY(rollerSpeed);
-      cameraRotation += rollerSpeedMultiplier * rollerSpeed;
-     // roller.rotateX(-rollerSpeedMultiplier * rollerSpeed);
-    }
-    if (e.key == "ArrowLeft") {
-      centerBox.rotateY(-rollerSpeed);
+window.addEventListener("keydown", (e) => {
+  if (e.key == "ArrowRight") {
+    centerBox.rotateY(rollerSpeed);
+    cameraRotation += rollerSpeedMultiplier * rollerSpeed;
+    // roller.rotateX(-rollerSpeedMultiplier * rollerSpeed);
+  }
+  if (e.key == "ArrowLeft") {
+    centerBox.rotateY(-rollerSpeed);
 
-   //   roller.rotateX(rollerSpeedMultiplier * rollerSpeed);
-      cameraRotation -= rollerSpeedMultiplier * rollerSpeed;
-    }
-    //   gsap.to(camera.position, {
-    //     z: 14,
-    //       duration: 1.5,
-    //       onUpdate: function () {
-    //         camera.lookAt(0,0,0)
-    //     }
-    //   });
-  });
+    //   roller.rotateX(rollerSpeedMultiplier * rollerSpeed);
+    cameraRotation -= rollerSpeedMultiplier * rollerSpeed;
+  }
+  //   gsap.to(camera.position, {
+  //     z: 14,
+  //       duration: 1.5,
+  //       onUpdate: function () {
+  //         camera.lookAt(0,0,0)
+  //     }
+  //   });
+});
 
-scene.add(...allSmallTree())
-
+scene.add(...allSmallTree());
 
 function toggle() {
   // console.log(camera.position);
@@ -898,43 +904,41 @@ function toggle() {
 
 function animate() {
   //Self-rotation
-  toggle()
+  toggle();
   const time = Date.now() * 0.0005;
   scooterLoaderx = Math.sin(time * 0.7) * 240;
   scooterLoaderz = Math.cos(time * 0.7) * 240;
 
- if (mug) {
-   mug.rotation.y -= 0.04;
- }
-
-if (runMixer) {
-  runMixer.update(0.1);
+  if (mug) {
+    mug.rotation.y -= 0.04;
   }
-  
-  
-//camera.position.x = 350 * Math.sin(cameraRotation);
-// camera.position.z = 350 * Math.cos(cameraRotation);
-  
-//  centerBox.rotateY(Math.sin(cameraRotation));
-//console.log(camera.position)
 
-// Handle window resize
-window.addEventListener('resize', () => {
-  const newWidth = window.innerWidth;
-  const newHeight = window.innerHeight;
+  if (runClapperMixer) {
+    runClapperMixer.update(0.009);
+  }
 
-  camera.aspect = newWidth / newHeight;
-  camera.updateProjectionMatrix();
+  if (runRoboMixer) {
+    runRoboMixer.update(0.1);
+  }
+  if (runCyclistMixer) {
+    runCyclistMixer.update(0.1);
+  }
+  //camera.position.x = 350 * Math.sin(cameraRotation);
+  // camera.position.z = 350 * Math.cos(cameraRotation);
 
-  renderer.setSize(newWidth, newHeight);
-});
+  //  centerBox.rotateY(Math.sin(cameraRotation));
+  //console.log(camera.position)
 
+  // Handle window resize
+  window.addEventListener("resize", () => {
+    const newWidth = window.innerWidth;
+    const newHeight = window.innerHeight;
 
+    camera.aspect = newWidth / newHeight;
+    camera.updateProjectionMatrix();
 
-
-
-
-
+    renderer.setSize(newWidth, newHeight);
+  });
 
   orbit.addEventListener("change", () => {
     // centerBox.rotateY(0.00001);
@@ -943,20 +947,18 @@ window.addEventListener('resize', () => {
     //  roller.position.z = camera.rotation.y * 120;
   });
 
-  
   //  roller.position.x = Math.sin(time * 0.7) * 270;
   //  roller.position.z = Math.cos(time * 0.7) * 270;
 
   for (var i = 0; i < cloudCount; i++) {
     cloudList[i].position.x += 0.9;
   }
- 
+
   //roller.rotateX(-1 * rollerSpeed);
   camera.lookAt(0, 0, 0);
 
-
   centerBox1.rotation.y -= 0.01;
-//scooterLady.rotation.y -= 0.01
+  //scooterLady.rotation.y -= 0.01
   renderer.render(scene, camera);
 }
 
