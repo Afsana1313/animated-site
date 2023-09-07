@@ -178,15 +178,13 @@ islandloader.load(
         l.shadow.mapSize.height = 2048;
       }
     });
-    // island k ghurie kono lav nei..camera kei ghurate hobe
+   
     window.addEventListener("keydown", (e) => {
       if (e.key == "ArrowRight") {
         centerIsland.rotateY(-0.05);
-        setTimeout(function () {}, 1500);
       }
       if (e.key == "ArrowLeft") {
         centerIsland.rotateY(0.05);
-        setTimeout(function () {}, 1500);
       }
     });
     centerIsland.add(gltf.scene);
@@ -222,17 +220,18 @@ loader.load(
       }
       let model = gltf.scene;
       runCyclistMixer = new THREE.AnimationMixer(model);
-      animationAction = runCyclistMixer.clipAction(gltf.animations[0]);
+      animationAction = runCyclistMixer.clipAction(gltf.animations[0])
       // animationAction.clampWhenFinished = true
-      console.log(gltf.animations);
-      animationAction.play();
+      //console.log(gltf.animations);
+      animationAction.fadeIn(5).play();
       window.addEventListener("keydown", (e) => {
         if (e.key == "ArrowRight" || e.key == "ArrowLeft") {
-          animationAction.play();
+          animationAction.fadeOut(2).play();
+        
           // animationAction.paused = false;
-          setTimeout(function () {
-            animationAction.paused = true;
-          }, 2000);
+          // setTimeout(function () {
+          //   animationAction.paused = true;
+          // }, 2000);
         }
       });
     });
